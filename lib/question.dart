@@ -5,17 +5,27 @@ import 'data/questions.dart';
 import 'models/quiz_question.dart';
 
 class Question extends StatefulWidget {
-  const Question({super.key});
+  const Question(this.onSelectedAnswer, {super.key});
+
+  final void Function(String) onSelectedAnswer;
 
   @override
   State<Question> createState() => _QuestionState();
 }
 
 class _QuestionState extends State<Question> {
-  QuizQuestion question = questions[0];
+  int currentQuestion = 0;
+
+  void answerQuestion(String answer) {
+    widget.onSelectedAnswer(answer);
+    setState(() {
+      currentQuestion++;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    QuizQuestion question = questions[currentQuestion];
     return Center(
       child: Container(
         margin: const EdgeInsets.all(16),
@@ -32,7 +42,7 @@ class _QuestionState extends State<Question> {
             ...question.getShuffledAnswers.map(
               (e) => AnswerButton(
                 e,
-                () {},
+                () => answerQuestion(e),
               ),
             )
           ],
