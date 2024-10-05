@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'answer_button.dart';
+import 'data/questions.dart';
+import 'models/quiz_question.dart';
 
 class Question extends StatefulWidget {
   const Question({super.key});
@@ -10,22 +12,29 @@ class Question extends StatefulWidget {
 }
 
 class _QuestionState extends State<Question> {
+  QuizQuestion question = questions[0];
+
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
         margin: const EdgeInsets.all(16),
-        child: const Column(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'data',
+              question.text,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
             ),
-            SizedBox(height: 20),
-            AnswerButton(),
+            const SizedBox(height: 20),
+            ...question.getShuffledAnswers.map(
+              (e) => AnswerButton(
+                e,
+                () {},
+              ),
+            )
           ],
         ),
       ),
